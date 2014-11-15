@@ -34,9 +34,13 @@ public class ShowPosts extends HttpServlet {
 		// TODO Auto-generated method stub
 		PostDataHandler handler = new PostDataHandler("posts.txt");
 		
-		request.setAttribute("posts", handler.getPosts());
+		//request.setAttribute("posts", handler.getPosts());
 		
-		request.getRequestDispatcher("viewPosts.jsp").forward(request,response);
+		request.getSession().setAttribute("posts", handler.getPosts());
+		
+		//request.getRequestDispatcher("viewPosts.jsp").forward(request,response);
+		
+		response.sendRedirect("viewPosts.jsp");
 	}
 
 	/**
@@ -48,9 +52,7 @@ public class ShowPosts extends HttpServlet {
 		
 		handler.addPost(new Post((String) request.getSession().getAttribute("username"), new Date(), request.getParameter("post"))); 
 		
-		request.setAttribute("posts", handler.getPosts());
-		
-		request.getRequestDispatcher("viewPosts.jsp").forward(request,response);
+		this.doGet(request, response);
 	}
 
 }
