@@ -38,9 +38,9 @@ public class ShowPosts extends HttpServlet {
 		
 		request.getSession().setAttribute("posts", handler.getPosts());
 		
-		//request.getRequestDispatcher("viewPosts.jsp").forward(request,response);
+		request.getRequestDispatcher("viewPosts.jsp").forward(request,response);
 		
-		response.sendRedirect("viewPosts.jsp");
+		//response.sendRedirect("viewPosts.jsp");
 	}
 
 	/**
@@ -51,8 +51,14 @@ public class ShowPosts extends HttpServlet {
 		PostDataHandler handler = new PostDataHandler("posts.txt");
 		
 		handler.addPost(new Post((String) request.getSession().getAttribute("username"), new Date(), request.getParameter("post"))); 
+		// If I do this, it will still do a post if I do a refresh. I want it to get the most recent posts on the refresh.
+		//this.doGet(request, response);
 		
-		this.doGet(request, response);
+		// Send redirect always performs a GET, so this will make the refresh do a Get every time.
+		response.sendRedirect("ShowPosts");
+		
+		// This will just perform another post.
+		//request.getRequestDispatcher("ShowPosts").forward(request, response);
 	}
 
 }
